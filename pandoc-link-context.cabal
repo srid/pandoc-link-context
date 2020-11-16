@@ -8,7 +8,9 @@ maintainer:          srid@srid.ca
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
 
-executable pandoc-link-context
-  main-is:             Main.hs
-  build-depends:       base >=4.13 && <4.14
+library
   default-language:    Haskell2010
+  hs-source-dirs: src
+  exposed-modules:
+    Text.Pandoc.LinkContext
+  build-depends:       base
