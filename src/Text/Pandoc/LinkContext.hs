@@ -2,9 +2,8 @@ module Text.Pandoc.LinkContext (queryLinksWithContext) where
 
 import Data.List (nub)
 import qualified Data.Map.Strict as Map
-import qualified Data.Text as T
 import qualified Text.Pandoc.Builder as B
-import Text.Pandoc.Definition (Attr, Block, Inline (Link), Pandoc (..), Target)
+import Text.Pandoc.Definition (Block, Inline (Link), Pandoc (..))
 import qualified Text.Pandoc.Walk as W
 
 type Url = Text
@@ -31,7 +30,7 @@ queryLinksWithContext =
           -- Gather all filenames linked, and have them put (see above) in the
           -- same definition list block.
           concat $
-            flip fmap xs $ \(is, bss) ->
+            xs <&> \(is, bss) ->
               let def = queryLinkUrls is
                   body = fmap (fmap (fmap fst . go)) bss
                in def <> concat (concat body)
@@ -42,15 +41,8 @@ queryLinksWithContext =
       W.query (maybeToList . getLinkUrl)
 
     getLinkUrl :: Inline -> Maybe Url
-    getLinkUrl x = do
-      (_attr, _inlines, (url, _title)) <- getLink x
-      pure url
-
-    getLink :: Inline -> Maybe (Attr, [Inline], Target)
-    getLink = \case
-      Link attr inlines target@(url, _title) -> do
-        guard $ not $ "/" `T.isInfixOf` url
-        guard $ ".md" `T.isSuffixOf` url
-        pure (attr, inlines, target)
+    getLinkUrl = \case
+      Link _attr _inlines (url, _title) -> do
+        pure url
       _ ->
         Nothing
