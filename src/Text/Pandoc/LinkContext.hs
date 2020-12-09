@@ -8,6 +8,10 @@ import qualified Text.Pandoc.Walk as W
 
 type Url = Text
 
+-- | Query the pandoc document for all links
+--
+-- Return a map, containing the "surrounding context" (as Pandoc blocks) for
+-- each link.
 queryLinksWithContext :: Pandoc -> Map Url [Block]
 queryLinksWithContext =
   fmap nub
