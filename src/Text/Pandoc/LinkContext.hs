@@ -48,8 +48,9 @@ queryLinksWithContext =
 
     getLinkUrl :: Inline -> Maybe (Url, [OtherAttr])
     getLinkUrl = \case
-      Link (_, _, attrs) _inlines (url, _title) -> do
-        pure (url, attrs)
+      Link (_, _, attrs) _inlines (url, title) -> do
+        -- Put title in attrs, as it *is* an attribute
+        pure (url, ("title", title) : attrs)
       _ ->
         Nothing
 
