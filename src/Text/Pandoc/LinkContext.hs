@@ -8,20 +8,22 @@ import qualified Text.Pandoc.Walk as W
 
 type Url = Text
 
+-- | Attributes other than id and class
+type OtherAttr = (Text, Text)
+
 -- | Query the pandoc document for all links
 --
 -- Return a map, containing the "surrounding context" (as Pandoc blocks) for
 -- each link.
-queryLinksWithContext :: Pandoc -> Map Url [Block]
+queryLinksWithContext :: Pandoc -> Map Url ([OtherAttr], [Block])
 queryLinksWithContext =
-  fmap nub
-    . Map.fromListWith (<>)
-    . fmap (second one)
+  fmap (second nub)
+    . Map.fromListWith combineContext
     . W.query go
   where
-    go :: Block -> [(Url, Block)]
+    go :: Block -> [(Url, ([OtherAttr], [Block]))]
     go blk =
-      fmap (,blk) $ case blk of
+      fmap (\(url, attr) -> (url, (attr, [blk]))) $ case blk of
         B.Para is ->
           queryLinkUrls is
         B.Plain is ->
@@ -37,16 +39,20 @@ queryLinksWithContext =
             xs <&> \(is, bss) ->
               let def = queryLinkUrls is
                   body = fmap (fmap (fmap fst . go)) bss
-               in def <> concat (concat body)
+               in def <> fmap (,[]) (concat (concat body))
         _ -> mempty
 
-    queryLinkUrls :: W.Walkable Inline b => b -> [Url]
+    queryLinkUrls :: W.Walkable Inline b => b -> [(Url, [OtherAttr])]
     queryLinkUrls =
       W.query (maybeToList . getLinkUrl)
 
-    getLinkUrl :: Inline -> Maybe Url
+    getLinkUrl :: Inline -> Maybe (Url, [OtherAttr])
     getLinkUrl = \case
-      Link _attr _inlines (url, _title) -> do
-        pure url
+      Link (_, _, attrs) _inlines (url, _title) -> do
+        pure (url, attrs)
       _ ->
         Nothing
+
+    combineContext :: ([OtherAttr], [Block]) -> ([OtherAttr], [Block]) -> ([OtherAttr], [Block])
+    combineContext (a1, b1) (a2, b2) =
+      (a1 <> a2, b1 <> b2)
