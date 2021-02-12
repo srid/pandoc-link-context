@@ -15,15 +15,15 @@ type OtherAttr = (Text, Text)
 --
 -- Return a map, containing the "surrounding context" (as Pandoc blocks) for
 -- each link.
-queryLinksWithContext :: Pandoc -> Map Url ([OtherAttr], [Block])
+queryLinksWithContext :: Pandoc -> Map Url (NonEmpty ([OtherAttr], [Block]))
 queryLinksWithContext =
-  fmap (second nub)
-    . Map.fromListWith combineContext
+  fmap (fmap $ second nub)
+    . Map.fromListWith (<>)
     . W.query go
   where
-    go :: Block -> [(Url, ([OtherAttr], [Block]))]
+    go :: Block -> [(Url, NonEmpty ([OtherAttr], [Block]))]
     go blk =
-      fmap (\(url, attr) -> (url, (attr, [blk]))) $ case blk of
+      fmap (\(url, attr) -> (url, one (attr, [blk]))) $ case blk of
         B.Para is ->
           queryLinkUrls is
         B.Plain is ->
@@ -53,7 +53,3 @@ queryLinksWithContext =
         pure (url, ("title", title) : attrs)
       _ ->
         Nothing
-
-    combineContext :: ([OtherAttr], [Block]) -> ([OtherAttr], [Block]) -> ([OtherAttr], [Block])
-    combineContext (a1, b1) (a2, b2) =
-      (a1 <> a2, b1 <> b2)
