@@ -1,6 +1,8 @@
 # pandoc-link-context
 
-This library extracts "[contextual links](https://notes.andymatuschak.org/Contextual_backlinks)" from your Pandoc document. That is, it queries all links with their surrounding context (such as the paragraph or the list item they are in). See it in action [here](https://neuron.zettel.page/cerveau.html) (scroll to bottom).
+This library extracts "[contextual links](https://notes.andymatuschak.org/Contextual_backlinks)" from your Pandoc document. That is, it queries all links with their surrounding context (such as the paragraph or the list item they are in). See it in action [here][ex] (scroll to bottom).
+
+[ex]: https://neuron.zettel.page/linking
 
 ## Examples
 
