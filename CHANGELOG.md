@@ -1,6 +1,6 @@
 # Revision history for pandoc-link-context
 
-## Unreleased
+## 1.2.0.0
 
 - Include Link attributes (excluded id/class) in results 
 - Allow mulitple links using the same Url
