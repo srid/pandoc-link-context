@@ -32,14 +32,6 @@ queryLinksWithContext =
           queryLinkUrls is
         B.Header _ _ is ->
           queryLinkUrls is
-        B.DefinitionList xs ->
-          -- Gather all filenames linked, and have them put (see above) in the
-          -- same definition list block.
-          concat $
-            xs <&> \(is, bss) ->
-              let def = queryLinkUrls is
-                  body = fmap (fmap (fmap fst . go)) bss
-               in def <> fmap (,[]) (concat (concat body))
         _ -> mempty
 
     queryLinkUrls :: W.Walkable Inline b => b -> [(Url, [OtherAttr])]
