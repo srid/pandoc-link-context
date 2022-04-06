@@ -16,7 +16,7 @@ library
   hs-source-dirs:     src
   exposed-modules:    Text.Pandoc.LinkContext
   build-depends:
-      base >=4.12 && < 4.15
+      base >=4.12 && < 4.17
     , containers
     , pandoc-types
     , relude        >=0.7.0.0
