@@ -1,5 +1,9 @@
 # Revision history for pandoc-link-context
 
+## Unreleased
+
+- Remove definition list handling. Fixes https://github.com/srid/emanote/issues/275
+
 ## 1.2.0.0
 
 - Include Link attributes (excluded id/class) in results 
