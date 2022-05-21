@@ -1,6 +1,6 @@
 # Revision history for pandoc-link-context
 
-## Unreleased
+## 1.4.0.0
 
 - Remove definition list handling. Fixes https://github.com/srid/emanote/issues/275
 
