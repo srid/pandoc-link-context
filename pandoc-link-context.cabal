@@ -2,7 +2,9 @@ cabal-version:      2.2
 name:               pandoc-link-context
 version:            1.4.0.0
 synopsis:           Extract "contextual links" from Pandoc
-description:        A library to pull out all links with their surrounding context in your Pandoc documents. Useful for software dealing with wiki-links and Zettelkasten.
+description:
+  A library to pull out all links with their surrounding context in your Pandoc documents. Useful for software dealing with wiki-links and Zettelkasten.
+
 category:           Text
 license:            BSD-3-Clause
 license-file:       LICENSE
@@ -16,7 +18,7 @@ library
   hs-source-dirs:     src
   exposed-modules:    Text.Pandoc.LinkContext
   build-depends:
-      base >=4.12 && < 4.17
+    , base          >=4.12    && <4.17
     , containers
     , pandoc-types
     , relude        >=0.7.0.0
@@ -29,11 +31,12 @@ library
   default-extensions:
     FlexibleContexts
     FlexibleInstances
+    ImportQualifiedPost
     LambdaCase
     OverloadedStrings
-      RecordWildCards
-      ScopedTypeVariables
-      TupleSections
+    RecordWildCards
+    ScopedTypeVariables
+    TupleSections
     TypeApplications
     ViewPatterns
 
